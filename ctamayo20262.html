@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repaso de Ciencias - 3er Grado</title>
+    <style>
+        :root {
+            --primary-color: #ffcb05; 
+            --secondary-color: #2a75bb; 
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --hint-bg: #fff8e1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .cabecera {
+            text-align: center;
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--secondary-color);
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            margin: 0 0 10px 0;
+        }
+
+        .tarjeta-pregunta {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+
+        .tarjeta-pregunta:hover {
+            transform: translateY(-2px);
+        }
+
+        .badges {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .tema-badge {
+            color: #666;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .nivel-badge {
+            background-color: var(--primary-color);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+
+        .pregunta-texto {
+            font-size: 1.2em;
+            font-weight: 500;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .btn-pista {
+            background-color: transparent;
+            border: 1px dashed var(--secondary-color);
+            color: var(--secondary-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-pista:hover {
+            background-color: #eef5fb;
+        }
+
+        .pista-texto {
+            display: none;
+            background-color: var(--hint-bg);
+            padding: 12px;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+
+        .opciones {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        @media (min-width: 600px) {
+            .opciones {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        button.opcion {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            color: var(--text-color);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        button.opcion:hover:not(:disabled) {
+            border-color: var(--secondary-color);
+            background-color: #fafafa;
+        }
+
+        button.opcion.seleccionada {
+            border-color: var(--secondary-color);
+            background-color: #e6f0fa;
+            font-weight: bold;
+        }
+
+        button.opcion:disabled {
+            cursor: not-allowed;
+        }
+
+        .correcto {
+            background-color: #4CAF50 !important;
+            border-color: #4CAF50 !important;
+            color: white !important;
+        }
+
+        .incorrecto {
+            background-color: #f44336 !important;
+            border-color: #f44336 !important;
+            color: white !important;
+        }
+
+        .evaluacion-panel {
+            text-align: center;
+            margin-top: 30px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        button.btn-accion {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button.btn-accion:hover {
+            background-color: #1e5c94;
+        }
+
+        .resultados-finales {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .puntaje {
+            font-size: 2.5em;
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+        <div class="cabecera">
+            <h1>Guía de Repaso: El Cuerpo Humano</h1>
+            <p>Lee con atención, usa las pistas si lo necesitas y elige tu respuesta. Al final, presiona el botón para revisar.</p>
+        </div>
+
+        <div id="lista-preguntas">
+            </div>
+
+        <div class="evaluacion-panel">
+            <button class="btn-accion" id="btn-evaluar" onclick="evaluarRespuestas()">Revisar mis respuestas</button>
+            
+            <div class="resultados-finales" id="resultados-finales">
+                <h2>Resultados de la Misión</h2>
+                <div class="puntaje" id="puntaje-texto">0 / 12</div>
+                <p id="mensaje-final" style="font-size: 1.1em;"></p>
+                <button class="btn-accion" style="margin-top: 15px; background-color: var(--primary-color); color: black;" onclick="location.reload()">Volver a intentar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const bancoPreguntas = [
+            {
+                tema: "Cap. 1: El sistema respiratorio", nivel: "Básico",
+                pregunta: "¿Cuál es el órgano principal de nuestro cuerpo que utilizamos para respirar?",
+                pista: "🔍 Pista de la Pokédex: Son como dos globos rosados que se inflan y desinflan dentro de tu pecho.",
+                opciones: ["El corazón", "El estómago", "Los pulmones", "El cerebro"],
+                respuestaCorrecta: 2
+            },
+            {
+                tema: "Cap. 1: El sistema respiratorio", nivel: "Intermedio",
+                pregunta: "Cuando tomamos aire (inspiramos), ¿qué gas invisible necesita nuestro cuerpo para vivir?",
+                pista: "🔍 Pista de la Pokédex: Es el gas puro que los árboles y plantas nos regalan durante el día.",
+                opciones: ["Dióxido de carbono", "Oxígeno", "Nitrógeno", "Helio"],
+                respuestaCorrecta: 1
+            },
+            {
+                tema: "Cap. 1: El sistema respiratorio", nivel: "Avanzado",
+                pregunta: "El aire entra por la nariz y baja por un 'tubito' hasta llegar a los pulmones. ¿Cómo se llama ese conducto?",
+                pista: "🔍 Pista de la Pokédex: Su nombre suena parecido a la palabra 'traje', y tiene forma de un tubo con anillos.",
+                opciones: ["Esófago", "Intestino", "Tráquea", "Vena"],
+                respuestaCorrecta: 2
+            },
+            {
+                tema: "Cap. 2: El sistema circulatorio", nivel: "Básico",
+                pregunta: "¿Qué órgano funciona como un motor y bombea la sangre a todo nuestro cuerpo?",
+                pista: "🔍 Pista de la Pokédex: Hace 'pum-pum' todo el día y está un poquito hacia la izquierda de tu pecho.",
+                opciones: ["Los riñones", "El corazón", "Los pulmones", "El hígado"],
+                respuestaCorrecta: 1
+            },
+            {
+                tema: "Cap. 2: El sistema circulatorio", nivel: "Intermedio",
+                pregunta: "La sangre viaja por todo nuestro cuerpo usando unos 'caminitos' o tubos. ¿Cómo se llaman?",
+                pista: "🔍 Pista de la Pokédex: Mírate las muñecas de las manos, ¿ves unas líneas azuladas o verdosas? Esas son parte de ellos.",
+                opciones: ["Venas y arterias", "Tráquea y esófago", "Huesos y músculos", "Nervios"],
+                respuestaCorrecta: 0
+            },
+            {
+                tema: "Cap. 2: El sistema circulatorio", nivel: "Avanzado",
+                pregunta: "¿Qué componente de la sangre se encarga de transportar el oxígeno desde los pulmones hacia todas las partes del cuerpo?",
+                pista: "🔍 Pista de la Pokédex: Llevan la palabra 'rojos' en su nombre porque le dan ese color a tu sangre.",
+                opciones: ["Glóbulos blancos", "Plaquetas", "Plasma", "Glóbulos rojos"],
+                respuestaCorrecta: 3
+            },
+            {
+                tema: "Cap. 3: Sistema nervioso central", nivel: "Básico",
+                pregunta: "¿Qué órgano está guardado y protegido dentro de nuestra cabeza y nos ayuda a pensar, aprender y recordar?",
+                pista: "🔍 Pista de la Pokédex: Es como la computadora principal o el centro de mando de tu cuerpo.",
+                opciones: ["El corazón", "El cerebro", "El cráneo", "El estómago"],
+                respuestaCorrecta: 1
+            },
+            {
+                tema: "Cap. 3: Sistema nervioso central", nivel: "Intermedio",
+                pregunta: "Si tocas una olla muy caliente por accidente, quitas la mano rapidísimo. ¿Qué sistema envía esa señal de peligro?",
+                pista: "🔍 Pista de la Pokédex: Es el sistema que funciona como si tuviera 'cables eléctricos' para que sientas todo.",
+                opciones: ["El sistema digestivo", "El sistema excretor", "El sistema nervioso", "El sistema respiratorio"],
+                respuestaCorrecta: 2
+            },
+            {
+                tema: "Cap. 3: Sistema nervioso central", nivel: "Avanzado",
+                pregunta: "Además del cerebro, hay un 'cable principal' que baja por el medio de nuestra espalda llevando mensajes a todo el cuerpo. ¿Qué es?",
+                pista: "🔍 Pista de la Pokédex: Está escondida y protegida justo en el centro de los huesos de tu espalda (la columna).",
+                opciones: ["La columna vertebral", "La médula espinal", "La tráquea", "La arteria principal"],
+                respuestaCorrecta: 1
+            },
+            {
+                tema: "Cap. 4: El sistema excretor", nivel: "Básico",
+                pregunta: "¿A través de qué líquido elimina nuestro cuerpo los desechos y el agua que ya no necesitamos?",
+                pista: "🔍 Pista de la Pokédex: Es el líquido amarillento que expulsamos cuando vamos al baño.",
+                opciones: ["La sangre", "La saliva", "La orina", "Las lágrimas"],
+                respuestaCorrecta: 2
+            },
+            {
+                tema: "Cap. 4: El sistema excretor", nivel: "Intermedio",
+                pregunta: "Tenemos dos órganos con forma de frijol que funcionan como coladores para limpiar nuestra sangre. ¿Cómo se llaman?",
+                pista: "🔍 Pista de la Pokédex: Tienen forma de pallares o frijoles y están en la parte baja de tu espalda.",
+                opciones: ["Los pulmones", "Los riñones", "Los ovarios", "Los intestinos"],
+                respuestaCorrecta: 1
+            },
+            {
+                tema: "Cap. 4: El sistema excretor", nivel: "Avanzado",
+                pregunta: "Después de que los riñones fabrican la orina, esta viaja y se guarda en una especie de 'bolsita' antes de ir al baño. ¿Cómo se llama?",
+                pista: "🔍 Pista de la Pokédex: Es como un globito elástico que te avisa cuando está lleno y necesitas ir al baño.",
+                opciones: ["Estómago", "Vejiga", "Páncreas", "Vesícula"],
+                respuestaCorrecta: 1
+            }
+        ];
+
+        // Array para guardar la respuesta elegida por el alumno
+        const respuestasSeleccionadas = new Array(bancoPreguntas.length).fill(null);
+
+        function renderizarPreguntas() {
+            const contenedor = document.getElementById('lista-preguntas');
+            contenedor.innerHTML = '';
+
+            bancoPreguntas.forEach((item, qIndex) => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'tarjeta-pregunta';
+                tarjeta.id = `pregunta-card-${qIndex}`;
+
+                // HTML interno de la tarjeta
+                tarjeta.innerHTML = `
+                    <div class="badges">
+                        <span class="tema-badge">${item.tema}</span>
+                        <span class="nivel-badge">${item.nivel}</span>
+                    </div>
+                    <div class="pregunta-texto">${qIndex + 1}. ${item.pregunta}</div>
+                    
+                    <button class="btn-pista" onclick="togglePista(${qIndex})">👁️ Ver Pista</button>
+                    <div class="pista-texto" id="pista-${qIndex}">${item.pista}</div>
+                    
+                    <div class="opciones" id="opciones-${qIndex}"></div>
+                `;
+
+                contenedor.appendChild(tarjeta);
+
+                // Generar botones de opciones
+                const contenedorOpciones = document.getElementById(`opciones-${qIndex}`);
+                item.opciones.forEach((opcion, optIndex) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'opcion';
+                    btn.id = `btn-${qIndex}-${optIndex}`;
+                    btn.textContent = opcion;
+                    btn.onclick = () => seleccionarOpcion(qIndex, optIndex);
+                    contenedorOpciones.appendChild(btn);
+                });
+            });
+        }
+
+        function togglePista(index) {
+            const pista = document.getElementById(`pista-${index}`);
+            if (pista.style.display === 'block') {
+                pista.style.display = 'none';
+            } else {
+                pista.style.display = 'block';
+            }
+        }
+
+        function seleccionarOpcion(qIndex, optIndex) {
+            // Guardar selección
+            respuestasSeleccionadas[qIndex] = optIndex;
+
+            // Quitar clase "seleccionada" a todos los botones de esta pregunta
+            const opcionesContenedor = document.getElementById(`opciones-${qIndex}`);
+            const botones = opcionesContenedor.getElementsByClassName('opcion');
+            for (let btn of botones) {
+                btn.classList.remove('seleccionada');
+            }
+
+            // Añadir clase "seleccionada" al botón clicado
+            document.getElementById(`btn-${qIndex}-${optIndex}`).classList.add('seleccionada');
+        }
+
+        function evaluarRespuestas() {
+            // Validar que todas estén respondidas (opcional, pero buena práctica)
+            if (respuestasSeleccionadas.includes(null)) {
+                alert("¡Espera! Aún te faltan preguntas por responder. Revisa la lista.");
+                return;
+            }
+
+            let puntaje = 0;
+
+            bancoPreguntas.forEach((item, qIndex) => {
+                const seleccion = respuestasSeleccionadas[qIndex];
+                const btnSeleccionado = document.getElementById(`btn-${qIndex}-${seleccion}`);
+                const btnCorrecto = document.getElementById(`btn-${qIndex}-${item.respuestaCorrecta}`);
+
+                // Deshabilitar todos los botones para que no se cambie la respuesta
+                const botones = document.getElementById(`opciones-${qIndex}`).getElementsByClassName('opcion');
+                for (let btn of botones) {
+                    btn.disabled = true;
+                }
+
+                // Aplicar estilos de correcto/incorrecto
+                if (seleccion === item.respuestaCorrecta) {
+                    btnSeleccionado.classList.add('correcto');
+                    puntaje++;
+                } else {
+                    btnSeleccionado.classList.add('incorrecto');
+                    btnCorrecto.classList.add('correcto');
+                }
+            });
+
+            // Mostrar resultados
+            document.getElementById('btn-evaluar').style.display = 'none';
+            document.getElementById('resultados-finales').style.display = 'block';
+            document.getElementById('puntaje-texto').textContent = `${puntaje} / ${bancoPreguntas.length}`;
+            
+            let mensaje = "";
+            const porcentaje = (puntaje / bancoPreguntas.length) * 100;
+            if (porcentaje === 100) mensaje = "¡Perfecto! El repaso ha sido un éxito rotundo.";
+            else if (porcentaje >= 75) mensaje = "¡Muy bien hecho! Has repasado con mucha atención.";
+            else mensaje = "Buen intento. Repasa las tarjetas rojas para ver en qué te equivocaste y vuélvelo a intentar.";
+            
+            document.getElementById('mensaje-final').textContent = mensaje;
+            
+            // Scroll hacia abajo para ver el resultado
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Iniciar
+        renderizarPreguntas();
+    </script>
+</body>
+</html>
